@@ -36,7 +36,7 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore"}
 firebase-analytics = { module = "com.google.firebase:firebase-analytics"}
-coroutines-play-services = { module = "org.jetbrain.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-play-services" }
+coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-play-services" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

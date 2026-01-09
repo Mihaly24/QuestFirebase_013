@@ -10,6 +10,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -137,6 +139,40 @@ fun DetailSiswaBody(
                 },
                 onDeleteCancel = { deleteConfirmationRequired = false },
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
+            )
+        }
+    }
+}
+
+@Composable
+fun ItemDetailSiswa(
+    siswa: Siswa,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.padding_medium)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
+        ) {
+            ComponentDetailSiswa(
+                judul = stringResource(id = R.string.nama),
+                isinya = siswa.nama
+            )
+            ComponentDetailSiswa(
+                judul = stringResource(id = R.string.alamat),
+                isinya = siswa.alamat
+            )
+            ComponentDetailSiswa(
+                judul = stringResource(id = R.string.telpon),
+                isinya = siswa.telpon
             )
         }
     }

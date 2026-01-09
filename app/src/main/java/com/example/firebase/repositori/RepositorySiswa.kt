@@ -42,5 +42,39 @@ class FirebaseRepositorySiswa : RepositorySiswa {
         docRef.set(data).await()
     }
 
+    override suspend fun getSatuSiswa(id: Long): Siswa? {
+        return try {
+            val query = collection.whereEqualTo("id", id).get().await()
+            query.documents.firstOrNull()?.let { doc ->
+                Siswa(
+                    id = doc.getLong("id")?.toLong() ?: 0,
+                    nama = doc.getString("nama") ?: "",
+                    alamat = doc.getString("alamat") ?: "",
+                    telpon = doc.getString("telpon") ?: ""
+                )
+            }
+        } catch (e: Exception) {
+            println("Gagal baca data siswa : ${e.message}")
+            null
+        }
+    }
 
+    override suspend fun editSatuSiswa(id: Long, siswa: Siswa) {
+        val docQuery = collection.whereEqualTo("id", id).get().await()
+        val docId = docQuery.documents.firstOrNull()?.id ?: return
+        collection.document(docId).set(
+            mapOf(
+                "id" to siswa.id,
+                "nama" to siswa.nama,
+                "alamat" to siswa.alamat,
+                "telpon" to siswa.telpon
+            )
+        ).await()
+    }
+
+    override suspend fun hapusSatuSiswa(id: Long) {
+        val docQuery = collection.whereEqualTo("id", id).get().await()
+        val docId = docQuery.documents.firstOrNull()?.id ?: return
+        collection.document(docId).delete().await()
+    }
 }

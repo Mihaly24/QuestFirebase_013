@@ -1,10 +1,15 @@
 package com.example.firebase.view
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -13,6 +18,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
@@ -20,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.firebase.R
+import com.example.firebase.modeldata.Siswa
 import com.example.firebase.view.route.DestinasiDetail
 import com.example.firebase.viewmodel.DetailViewModel
 import com.example.firebase.viewmodel.PenyediaViewModel
@@ -88,6 +98,46 @@ fun DetailSiswaScreen(
                 }
                 is StatusUIDetail.Error -> OnError(retryAction = viewModel::getSatuSiswa, modifier = Modifier.fillMaxSize())
             }
+        }
+    }
+}
+
+@Composable
+fun DetailSiswaBody(
+    siswa: Siswa,
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+
+    Column(
+        modifier = modifier
+            .padding(dimensionResource(id = R.dimen.padding_medium))
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
+    ) {
+        ItemDetailSiswa(
+            siswa = siswa,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Button(
+            onClick = { deleteConfirmationRequired = true },
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.delete))
+        }
+
+        if (deleteConfirmationRequired) {
+            DeleteConfirmationDialog(
+                onDeleteConfirm = {
+                    deleteConfirmationRequired = false
+                    onDelete()
+                },
+                onDeleteCancel = { deleteConfirmationRequired = false },
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
+            )
         }
     }
 }
